@@ -47,31 +47,3 @@ bool runTests( std::vector<Test> tests, std::string (*func)(std::string, std::st
     }
     return allPass;
 }
-
-std::vector<std::string> readLines( std::string fileName )
-{
-    std::vector<std::string> lines;
-
-    std::ifstream f( fileName );
-    if ( !f.is_open() ) return lines;
-
-    std::string line;
-    while ( getline( f, line ) )
-    {
-        lines.push_back( line );
-    }
-    f.close();
-    return lines;
-}
-
-std::vector<int> readInts( std::string fileName )
-{
-    std::vector<std::string> lines = readLines( fileName );
-    std::vector<int> v;
-    for (auto line: lines)
-    {
-        auto val = stoi(line);
-        v.push_back(val);
-    }
-    return v;
-}
