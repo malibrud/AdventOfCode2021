@@ -41,7 +41,7 @@ bool runTests( std::vector<Test> tests, std::string (*func)(std::string, std::st
         }
         else
         {
-            printf("Fail\n");
+            printf("Fail --> %s\n", result.c_str());
             allPass = false;
         }
     }
