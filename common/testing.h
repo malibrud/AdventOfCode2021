@@ -16,12 +16,12 @@ std::vector<std::string> readLines( std::string fileName );
 std::vector<int> readInts( std::string fileName );
 bool runTests( std::vector<Test> tests, std::string (*func)(std::string, std::string) );
 
-void runPart(std::string part, std::string (*func)(std::string, std::string), std::vector<Test> &tests)
+void runPart(std::string part, std::string (*func)(std::string, std::string), std::vector<Test> &tests, std::string param = "")
 {
     printf("Running Part %s:\n", part.c_str());
     runTests(tests, func);
 
-    auto answer = func("data.txt", "");
+    auto answer = func("data.txt", param);
     printf("The answer is: %s\n", answer.c_str());
     printf("\n\n");
 }

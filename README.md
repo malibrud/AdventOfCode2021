@@ -42,3 +42,6 @@ if ( diff ) inc++;
 was approx 1,000 x 1,000.  Pretty straight forward to parse the input set the values in the grid and then count the 
 cells > 1.  I did run into a stack overflow because I was allocating the grid on the stack :(.  Changed to dynamic
 allocation to correct.
+
+## Day 06
+* Basic difference equation.  For part A, `int` was plenty big enough to store results.  For part B, had to use 64-bit integers.   This was the first problem that required a parameter to be passed into the solution.
