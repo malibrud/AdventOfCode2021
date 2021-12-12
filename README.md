@@ -45,3 +45,7 @@ allocation to correct.
 
 ## Day 06
 * Basic difference equation.  For part A, `int` was plenty big enough to store results.  For part B, had to use 64-bit integers.   This was the first problem that required a parameter to be passed into the solution.
+
+## Day 07
+* Pretty straightforward search.  Could be simplified by starting in the middle and stepping in the negative direction.
+Solution uses the common formula for the sum of numbers 1 to N as N * (N+1) / 2.
