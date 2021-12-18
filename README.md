@@ -49,3 +49,6 @@ allocation to correct.
 ## Day 07
 * Pretty straightforward search.  Could be simplified by starting in the middle and stepping in the negative direction.
 Solution uses the common formula for the sum of numbers 1 to N as N * (N+1) / 2.
+
+## Day 08
+* Quite a challenge to sort out which segments belonged to each numeral.  Didn't realize that the first 10 and the second four used different character ordering.  Kind of wished I would have use a set, but instead sorted the codes so that they would uniquely key into a map.
