@@ -158,3 +158,7 @@ Solution uses the common formula for the sum of numbers 1 to N as N * (N+1) / 2.
 ***9**9*******9****9******9*9******9***9*****9****99*******9*9*******9*****9*9*******99*****9*****9*
 ***9***99***99******99***9***9*9**999*9******9*****9***9**9***99***99*****999********9999**9*******9
 ```
+
+
+## Day 10
+* Pretty straightforward use of a stack to push opening brackets and pop closing brackets.  Part B required the use of `long long` to store some of the scores.
