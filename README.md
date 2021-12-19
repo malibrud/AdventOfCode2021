@@ -162,3 +162,7 @@ Solution uses the common formula for the sum of numbers 1 to N as N * (N+1) / 2.
 
 ## Day 10
 * Pretty straightforward use of a stack to push opening brackets and pop closing brackets.  Part B required the use of `long long` to store some of the scores.
+
+## Day 11
+* Simulation task analogous to the game of life.  It was a little tricky to hold to the "each cell only 
+flashes onece.  Solved through recursion.  Second part was pretty easy... just simulate forward.  The stopping criteria was pretty straight forward.
