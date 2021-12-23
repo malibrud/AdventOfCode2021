@@ -166,3 +166,6 @@ Solution uses the common formula for the sum of numbers 1 to N as N * (N+1) / 2.
 ## Day 11
 * Simulation task analogous to the game of life.  It was a little tricky to hold to the "each cell only 
 flashes onece.  Solved through recursion.  Second part was pretty easy... just simulate forward.  The stopping criteria was pretty straight forward.
+
+## Day 12
+* Implemented depth search first algorithm.  Worked well for part A.  For part B, I parameterized the algorithm with a max visits parameter.  I had to introduce some additional logic that breaks the overall generality to implement the "only a single cave may be visited twice".  I missed that at first and implemented code which would allow any small cave to be visited twice.  Needless to say, this resulted in many more paths.

@@ -10,42 +10,44 @@ using namespace std;
 
 vector<Test> partATests =
 {
-    {"test1.txt", "", "10"},
-    {"test2.txt", "", "19"},
-    {"test3.txt", "", "226"}
+    {"test1.txt", "1", "10"},
+    {"test2.txt", "1", "19"},
+    {"test3.txt", "1", "226"}
 };
 string paramA = "1"; 
  
 vector<Test> partBTests =
 {
-    {"test1.txt", "", "36"},
-    {"test2.txt", "", "103"},
-    {"test3.txt", "", "226"}
+    {"test1.txt", "2", "36"},
+    {"test2.txt", "2", "103"},
+    {"test3.txt", "2", "3509"}
 };
 string paramB = "2";
 
-map<string, bool> visited;
+map<string, int> visits;
 vector< pair<string, string> > edges;
 int visitNode( string node );
 vector<string> getNeighbors( string node );
+bool anyVisitedTwice();
 vector<string> path;
 
-int paramMaxVisits;
+int maxVisits;
 
 string computePartA( string fileName, string param )
 {
-    visited.clear();
+    visits.clear();
     edges.clear();
     path.clear();
 
+    maxVisits = stoi(param);
     auto lines = readLines(fileName);
     for (auto line : lines)
     {
         auto dash = line.find('-');
         auto v1 = line.substr(0,dash);
         auto v2 = line.substr(dash+1);
-        visited[v1] = false;
-        visited[v2] = false;
+        visits[v1] = 0;
+        visits[v2] = 0;
         pair<string, string> edge(v1, v2);
         edges.push_back(edge);
     }
@@ -58,13 +60,13 @@ int visitNode(string node)
 {
     if ( node == "end" ) 
     {   
-        // cout << "Path found: ";
-        // for (auto &p : path) cout << p << "-";
+        // for (auto &p : path) cout << p << ",";
         // cout << "end" << endl;
         return 1;
     }
-    if ( visited[ node ] ) return 0;
-    if ( islower(node[0]) ) visited[node] = true;
+    int thisMaxVisits = anyVisitedTwice() ? 1 : maxVisits;
+    if ( visits[node] == thisMaxVisits ) return 0;
+    if ( islower(node[0]) ) visits[node]++;
 
     path.push_back(node);
     auto neighbors = getNeighbors( node );
@@ -73,18 +75,33 @@ int visitNode(string node)
     {
         count += visitNode( n );
     }
-    visited[node] = false;
+    if ( islower(node[0]) ) visits[node]--;
     path.pop_back();
     return count;
+}
+
+bool anyVisitedTwice()
+{
+    for ( auto &v: visits )
+    {
+        if ( v.second == 2) return true;
+    }
+    return false;
 }
 
 vector<string> getNeighbors( string node )
 {
     vector<string> result;
     for (auto &e : edges)
-    {
-        if ( e.first == node && !visited[ e.second ] ) result.push_back( e.second );
-        if ( e.second == node && !visited[ e.first ] ) result.push_back( e.first );
+    {   
+        string next;
+        if ( e.first  == node) next = e.second;
+        if ( e.second == node) next = e.first;
+        if ( next == "" ) continue;
+
+        if ( visits[ next ] == maxVisits) continue;
+        if ( next == "start") continue;
+        result.push_back( next );
     }
     return result;
 }
@@ -92,7 +109,7 @@ vector<string> getNeighbors( string node )
 
 string computePartB( string fileName, string param )
 {
-    return to_string(0);
+    return computePartA( fileName, param );
 }
 
 int main(int argc, char **argv)
