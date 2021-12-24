@@ -1,5 +1,7 @@
 #include <list>
+#include <cmath>
 #include <algorithm>
+
 #include "../common/testing.h"
 #include "../common/readers.h"
 #include "../common/util.h"
@@ -8,21 +10,22 @@ using namespace std;
 
 vector<Test> partATests =
 {
-    {"test1.txt", "", "17"}
+    {"test1.txt", "1", "17"}
 };
-string paramA = ""; 
+string paramA = "1"; 
  
 vector<Test> partBTests =
 {
-    {"test1.txt", "", ""}
+    {"test1.txt", "2", "16"}
 };
-string paramB = "";
+string paramB = "12";
 
 string computePartA( string fileName, string param )
 {
     list< pair<int, int> > dots;
     vector< pair<char, int> > folds;
 
+    auto maxFolds = stoi( param );
     auto lines = readLines(fileName);
 
     bool parsingCoords = true;
@@ -61,25 +64,51 @@ string computePartA( string fileName, string param )
         }
     }
 
-    // Fold once
-    auto fold = folds[0];
-    for (auto &dot: dots)
+    // Fold the requested number of times.
+    auto nFolds = min( maxFolds, (int)folds.size() );
+    for ( int i = 0 ; i < nFolds ; i++ )
     {
+        auto &fold = folds[i];
         auto axis = fold.first;
         auto value = fold.second;
-        if ( axis == 'x' && dot.first  > value ) 
+        for (auto &dot: dots)
         {
-            dot.first = 2*value  - dot.first;
-        }
-        else if ( axis == 'y' && dot.second > value )
-        {
-            dot.second = 2*value - dot.second;
+            if ( axis == 'x' && dot.first  > value ) 
+            {
+                dot.first = 2*value  - dot.first;
+            }
+            else if ( axis == 'y' && dot.second > value )
+            {
+                dot.second = 2*value - dot.second;
+            }
         }
     }
 
     // Remove the duplicate dots.
     dots.sort();
     dots.unique();
+
+    // Print the characters only if all folds are done.
+    if ( maxFolds == (int)folds.size() )
+    {
+        auto xSize = 1 + max_element( dots.begin(), dots.end(), [](auto d1, auto d2){ return d1.first < d2.first ; } )->first;
+        auto ySize = 1 + max_element( dots.begin(), dots.end(), [](auto d1, auto d2){ return d1.second < d2.second ; } )->second;
+        string blank( xSize, ' ' );
+        vector<string> display( ySize );
+        fill( display.begin(), display.end(), blank );
+        for ( auto dot: dots )
+        {
+            auto x = dot.first;
+            auto y = dot.second;
+            display[y][x] = '#';
+        }
+        cout << endl;
+        for ( auto line: display )
+        {
+            cout << line << endl;
+        }
+        cout << endl;
+    }
 
     auto count = dots.size();
 

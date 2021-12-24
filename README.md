@@ -169,3 +169,8 @@ flashes onece.  Solved through recursion.  Second part was pretty easy... just s
 
 ## Day 12
 * Implemented depth search first algorithm.  Worked well for part A.  For part B, I parameterized the algorithm with a max visits parameter.  I had to introduce some additional logic that breaks the overall generality to implement the "only a single cave may be visited twice".  I missed that at first and implemented code which would allow any small cave to be visited twice.  Needless to say, this resulted in many more paths.
+
+## Day 13
+* The math is pretty striaght forward.  Managing the dots was the most challenging aspect.  Due to the size of the grid, I chose to store them as a list of coordinates using the `pair` class in the STL.  Rather than pruning the 
+list after every pass, I eventually ended up just folding all of the dots and then de-duplicating at the end.  Note that de-duplication is not necessary for the second part, but I chose to use one function for both parts,
+using the parameter to set the max number of folds and always returning the count of the unique dots.
