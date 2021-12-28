@@ -174,3 +174,11 @@ flashes onece.  Solved through recursion.  Second part was pretty easy... just s
 * The math is pretty striaght forward.  Managing the dots was the most challenging aspect.  Due to the size of the grid, I chose to store them as a list of coordinates using the `pair` class in the STL.  Rather than pruning the 
 list after every pass, I eventually ended up just folding all of the dots and then de-duplicating at the end.  Note that de-duplication is not necessary for the second part, but I chose to use one function for both parts,
 using the parameter to set the max number of folds and always returning the count of the unique dots.
+
+## Day 14
+* First part was relatively straight forward.  Simply build a new string from the old one.  Always 
+reserve 2x more space than the old one to assure performance is adequate.
+* Second part with 40 steps caused problems with exponential growth of the string.  Because there are
+only a finite number of possible pairs for insertion, I changed the approach to counting the number
+of types of pairs.  I had to also track which pair was tracking the count of a particular letter
+because all pairs overlap by one letter.
