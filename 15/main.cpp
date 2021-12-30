@@ -16,7 +16,7 @@ string paramA = "";
  
 vector<Test> partBTests =
 {
-    {"test1.txt", "", ""}
+    {"test1.txt", "", "315"}
 };
 string paramB = "";
 
@@ -117,29 +117,98 @@ string computePartA( string fileName, string param )
     return to_string( grid[R-1][C-1].g );
 }
 
-typedef long long int64;
-struct PairCount
-{
-    int64 nPairs;
-    int64 nFirst;
-    int64 nSecond;
-
-    PairCount()
-        : nPairs(0)
-        , nFirst(0)
-        , nSecond(0)
-    {}
-
-    PairCount( int64 n, int64 n1, int64 n2 )
-        : nPairs(n)
-        , nFirst(n1)
-        , nSecond(n2)
-    {}
-};
-
 string computePartB( string fileName, string param )
 {
-    return to_string(0);
+    auto lines = readLines( fileName );
+    int R = lines.size();       // Rows in one tile
+    int C = lines[0].size();    // Cols in one tile
+    int RR = 5*R;               // Total rows in all tiles
+    int CC = 5*C;               // Total cols in all tiles
+
+    vector< vector<Node> > grid;
+    grid.reserve( RR );
+    for (auto r = 0 ; r < RR ; r++)
+    {
+        auto rt = r / R;    // Row tile
+        auto ri = r % R;    // Row index within the tile
+
+        string &line = lines[ri];
+        vector<Node> row;
+        row.reserve( CC );
+        for (auto c = 0 ; c < CC ; c++)
+        {
+            auto ct = c / C;    // Column tile
+            auto ci = c % C;    // Column index within the tile
+            
+            // Implement risk rule for the additional tiles.
+            int risk = line[ci] - '0';
+            risk += rt + ct;
+            if ( risk > 9 ) risk -= 9;
+
+            Node node;
+            node.risk = risk;
+            node.r = r;
+            node.c = c;
+            node.f = INT32_MAX;
+            node.g = INT32_MAX;
+            node.h = INT32_MAX;
+            node.inOpenSet = false;
+            row.push_back( node );
+        }
+        grid.push_back( row );
+    }
+
+
+    // Initialize the start node at 0, 0.
+    grid[0][0].g = 0;
+    grid[0][0].h = RR - 1 + CC - 1;
+    grid[0][0].f = grid[0][0].g  + grid[0][0].h;
+
+    // Push it onto the open set.
+    priority_queue<Node*, vector<Node*>, Compare> openSet;
+    openSet.push(&grid[0][0]);
+    grid[0][0].inOpenSet = true;
+
+    int directions[4][2] = 
+    {
+        {-1,  0}, 
+        { 1,  0}, 
+        { 0, -1}, 
+        { 0,  1}
+    };
+
+    while ( !openSet.empty() )
+    {
+        auto current = openSet.top();
+        openSet.pop();
+        current->inOpenSet = false;
+
+        if ( current->r == RR-1 && current->c == CC-1 ) break;
+
+        for ( auto d = 0 ; d < 4 ; d++)
+        {
+            auto c = current->c + directions[d][0];
+            auto r = current->r + directions[d][1];
+            if ( r < 0 || r >= RR ) continue;
+            if ( c < 0 || c >= CC ) continue;
+
+            Node &neighbor = grid[r][c];
+            auto g = current->g + neighbor.risk;
+            if ( g < neighbor.g )
+            {
+                neighbor.g = g;
+                neighbor.h = RR-r-1 + CC-c-1;
+                neighbor.f = neighbor.g + neighbor.h;
+                neighbor.prev = current;
+                if ( !neighbor.inOpenSet )
+                {
+                    openSet.push( &neighbor );
+                    neighbor.inOpenSet = true;
+                }
+            }
+        }
+    }
+    return to_string( grid[RR-1][CC-1].g );
 }
 
 int main(int argc, char **argv)
