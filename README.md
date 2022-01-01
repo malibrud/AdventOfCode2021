@@ -217,3 +217,9 @@ node is already in the queue.  Part B was pretty much the
 same as part A algorithmically, I just had to generate a larger grid.  
 It was 500 x 500 nodes but still plenty small enough to fit in memory.
 * I was quite surprised tha the A* worked on my first build.  No debugging!  Whew!!!
+
+## Day 16
+* Recursive parsing task on a bit stream.  Pretty natural to do recursive processing.  Part A was 
+pretty straight forward.  The addition of operations was not too much of a wrinkle.  For part B
+all tests passed, but the answer was wrong.  Turned out that the computation was overflowing plain
+`int` and had to change the types associated with all calculations to 64 bit (i.e. `long long`).
