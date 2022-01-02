@@ -14,7 +14,7 @@ string paramA = "";
  
 vector<Test> partBTests =
 {
-    {"test1B.txt", "", "0"},
+    {"test1.txt", "", "112"},
 };
 string paramB = "";
 
@@ -50,7 +50,6 @@ string computePartA( string fileName, string param )
     {
         for ( auto vyi = vymin ; vyi <= vymax ; vyi++)
         {
-            //cout << "Trying: " << vxi << " " << vyi << ": ";
             int x = 0;
             int y = 0;
             int vx = vxi;
@@ -67,12 +66,10 @@ string computePartA( string fileName, string param )
                 // Check if we hit the target area
                 if ( x >= xmin && x <= xmax && y >= ymin && y <= ymax )
                 {
-                    //cout << "Hit " << hmax << endl;
                     hmaxmax = max( hmaxmax, hmax );
                     break;
                 }
             }
-            //cout << endl;
         }
 
     } 
@@ -82,7 +79,56 @@ string computePartA( string fileName, string param )
 
 string computePartB( string fileName, string param )
 {
-    return to_string( 0 );
+    auto lines = readLines( fileName );
+    auto targetArea = lines[0];
+
+    regex pattern( R"(target area: x=([-+]?\d+)\.\.([-+]?\d+), y=([-+]?\d+)..([-+]?\d+))" );
+    smatch match;
+    regex_match( targetArea, match, pattern );
+    int xmin = stoi( match[1] );
+    int xmax = stoi( match[2] );
+    int ymin = stoi( match[3] );
+    int ymax = stoi( match[4] );
+
+    // Determine min and max x velocity.
+    // Formulas below were derived from the sum 1...N = N(N+1)/2 solving for N given the sum.
+    int vxmin = (int)floor( ( -1 + sqrt( 1 + 8 * xmin ) ) / 2 );
+    int vxmax = xmax + 1;
+
+    // Determine min and max y velocity.
+    int vymin =  ymin - 1;
+    int vymax = -ymin + 1;
+
+    // now simulate all possible trajectories
+    int nHits = 0;
+    for ( auto vxi = vxmin ; vxi <= vxmax ; vxi++)
+    {
+        for ( auto vyi = vymin ; vyi <= vymax ; vyi++)
+        {
+            int x = 0;
+            int y = 0;
+            int vx = vxi;
+            int vy = vyi;
+            int hmax = 0;
+            while ( y >= ymin && x <= xmax )
+            {
+                x += vx;
+                y += vy;
+                if (vx > 0) vx--;
+                vy--;
+                hmax = max( hmax, y );
+
+                // Check if we hit the target area
+                if ( x >= xmin && x <= xmax && y >= ymin && y <= ymax )
+                {
+                    nHits++;
+                    break;
+                }
+            }
+        }
+
+    } 
+    return to_string( nHits );
 }
 
 
