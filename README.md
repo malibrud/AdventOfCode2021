@@ -377,7 +377,7 @@ The answer is: 3202
 
 ## Day 18
 * Parsing of the snail numbers wasn't too compilcated.  At first chose to implement as a binary
-tree, but the 'explode' operation because too complex.  After a lot of work decided to keep
+tree, but the 'explode' operation became too complex.  After a lot of work, I decided to keep
 the representation as a string because it helped with the explode operation and also helped 
 see what was going on.  The snails should really look into the place-value system of numbers.
 
