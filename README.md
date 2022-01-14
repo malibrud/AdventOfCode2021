@@ -374,3 +374,23 @@ Running tests...
 [0] test1.txt() -> 112...   Pass
 The answer is: 3202
 ```
+
+## Day 18
+* Parsing of the snail numbers wasn't too compilcated.  At first chose to implement as a binary
+tree, but the 'explode' operation because too complex.  After a lot of work decided to keep
+the representation as a string because it helped with the explode operation and also helped 
+see what was going on.  The snails should really look into the place-value system of numbers.
+
+Output is:
+```
+Running Part A:
+Running tests...
+[0] test1.txt() -> 4140...   Pass
+The answer is: 3806
+
+
+Running Part B:
+Running tests...
+[0] test1.txt() -> 3993...   Pass
+The answer is: 4727
+```
