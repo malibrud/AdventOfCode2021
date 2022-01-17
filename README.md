@@ -394,3 +394,111 @@ Running tests...
 [0] test1.txt() -> 3993...   Pass
 The answer is: 4727
 ```
+
+## Day 19
+* Reminded me of AOC 2020, day 20 with the jigsaw puzzle.  This was a 3-D jigsaw puzzle.  
+Wrote as an exhaustive of all possible corresponding points.  Did this in a depth-first search
+algorithm.  Had to maintain both the local `upstream --> downstream` and `global --> downstream` transforms.  
+
+The generated output was:
+
+```
+Running Part A:
+Running tests...
+[0] test1.txt() -> 79...   Pass
+The answer is: 425
+
+
+Running Part B:
+Running tests...
+[0] test1.txt() -> 3621...   Pass
+The answer is: 13354
+```
+
+It was a little challenging determining the full set of transforms.  They are the 
+symmetry group of the cube (w/o reflections).  There are 24 elements in this group.  I first thought
+about just manually enumerating them, but I decided on an approach to machine generate them. 
+Here is the code that I wrote to generate the full set.  It considers for each row each of the 
+following possibilities `{ [+/-1 0 0], [0 +/-1 0], [0 0 +/-1] }` and then keeps those which
+have determinant = +1.  Here is the code:
+
+```c++
+vector<Rotation> generateAllRotations()
+{
+    vector<Rotation> rotations;
+    rotations.reserve(24);
+    Rotation R;
+    
+    int v[2] = {-1, 1};
+    int i, j, k;
+    int ix, iy, iz;
+    int sx, sy, sz;
+    for (i = 0 ; i < 6 ; i++)
+    {
+        ix = i % 3;
+        sx = i < 3 ? +1 : -1;
+        R.R[0][(ix+0)%3] = sx;
+        R.R[0][(ix+1)%3] = 0;
+        R.R[0][(ix+2)%3] = 0;
+
+        for (j = 0 ; j < 6 ; j++)
+        {
+            iy = j % 3;
+            sy = j < 3 ? +1 : -1;
+
+            if (iy == ix) continue;
+
+            R.R[1][(iy+0)%3] = sy;
+            R.R[1][(iy+1)%3] = 0;
+            R.R[1][(iy+2)%3] = 0;
+            
+            for (k = 0 ; k < 6 ; k++)
+            {
+                iz = k % 3;
+                sz = k < 3 ? +1 : -1;
+
+                if (iz == ix || iz == iy) continue;
+                
+                R.R[2][(iz+0)%3] = sz;
+                R.R[2][(iz+1)%3] = 0;
+                R.R[2][(iz+2)%3] = 0;
+
+                int det = 0;
+                det += R.R[0][0] * ( R.R[1][1] * R.R[2][2] - R.R[1][2] * R.R[2][1] );
+                det += R.R[0][1] * ( R.R[1][2] * R.R[2][0] - R.R[1][0] * R.R[2][2] );
+                det += R.R[0][2] * ( R.R[1][0] * R.R[2][1] - R.R[1][1] * R.R[2][0] );
+                if (det == +1) 
+                {
+                    R.print();
+                    cout << endl;
+                    rotations.push_back( R );
+                }
+            }
+        }
+    }
+    return rotations;
+}
+```
+
+It generates the following values:
+
+```
+[  1  0  0 ]    [  1  0  0 ]    [  1  0  0 ]    [  1  0  0 ]    [  0  1  0 ]    [  0  1  0 ]    
+[  0  1  0 ]    [  0  0  1 ]    [  0 -1  0 ]    [  0  0 -1 ]    [  1  0  0 ]    [  0  0  1 ]    
+[  0  0  1 ]    [  0 -1  0 ]    [  0  0 -1 ]    [  0  1  0 ]    [  0  0 -1 ]    [  1  0  0 ]    
+
+
+[  0  1  0 ]    [  0  1  0 ]    [  0  0  1 ]    [  0  0  1 ]    [  0  0  1 ]    [  0  0  1 ]    
+[ -1  0  0 ]    [  0  0 -1 ]    [  1  0  0 ]    [  0  1  0 ]    [ -1  0  0 ]    [  0 -1  0 ]    
+[  0  0  1 ]    [ -1  0  0 ]    [  0  1  0 ]    [ -1  0  0 ]    [  0 -1  0 ]    [  1  0  0 ]    
+
+
+[ -1  0  0 ]    [ -1  0  0 ]    [ -1  0  0 ]    [ -1  0  0 ]    [  0 -1  0 ]    [  0 -1  0 ]    
+[  0  1  0 ]    [  0  0  1 ]    [  0 -1  0 ]    [  0  0 -1 ]    [  1  0  0 ]    [  0  0  1 ]    
+[  0  0 -1 ]    [  0  1  0 ]    [  0  0  1 ]    [  0 -1  0 ]    [  0  0  1 ]    [ -1  0  0 ]    
+
+
+[  0 -1  0 ]    [  0 -1  0 ]    [  0  0 -1 ]    [  0  0 -1 ]    [  0  0 -1 ]    [  0  0 -1 ]    
+[ -1  0  0 ]    [  0  0 -1 ]    [  1  0  0 ]    [  0  1  0 ]    [ -1  0  0 ]    [  0 -1  0 ]    
+[  0  0 -1 ]    [  1  0  0 ]    [  0 -1  0 ]    [  1  0  0 ]    [  0  1  0 ]    [ -1  0  0 ]    
+```

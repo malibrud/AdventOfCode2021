@@ -17,7 +17,7 @@ string paramA = "";
  
 vector<Test> partBTests =
 {
-    {"test1.txt", "", "3993"},
+    {"test1.txt", "", "3621"},
 };
 string paramB = "";
 
@@ -65,6 +65,11 @@ struct Point
         if ( p[2] < q.p[2] ) return true;
         if ( p[2] > q.p[2] ) return false;
         return false;
+    }
+
+    int norm1()
+    {
+        return abs(p[0]) + abs(p[1]) + abs(p[2]);
     }
 
     void print()
@@ -184,6 +189,7 @@ bool findMatches( vector<Scan>& scans, int upstreamIdx );
 bool tryMatch( Scan& s1, Scan& s2 );
 int countMatchesGivenOffset( Scan& s1, Scan& s2, Point& T );
 int countBeacons( vector<Scan>& scans );
+int getMaxDist( vector<Scan>& scans );
 
 vector<Rotation> allRotations = generateAllRotations();
 
@@ -211,7 +217,24 @@ string computePartA( string fileName, string param )
 
 string computePartB( string fileName, string param )
 {
-    return to_string( 0 );
+    auto lines = readLines( fileName );
+    auto scanGroups = groupByScanner( lines );
+    auto scans = parseScans( scanGroups );
+
+    auto N = scans.size();
+
+    // Grow a list of matched scans
+    vector<int> matchedList;
+
+    // Setup the first scan as the global frame;
+    scans[0].matched = true;
+    scans[0].gPoints = scans[0].lPoints;
+    
+    findMatches( scans, 0 );
+
+    int maxDist = getMaxDist( scans );
+
+    return to_string( maxDist );
 }
 
 vector< vector<string> > groupByScanner( vector<string> lines )
@@ -267,7 +290,6 @@ vector<Scan> parseScans( vector<vector<string>> scanGroups )
                 throw exception("Could not parse coordinate.");
             }
         }
-        //sort( scan.lPoints.begin(), scan.lPoints.end() );
         scan.gPoints = scan.lPoints;
         scan.idx = i++;
         scans.push_back( scan );
@@ -285,7 +307,7 @@ bool findMatches( vector<Scan>& scans, int upstreamIdx )
         if ( downstream.matched ) continue;
         if ( tryMatch( upstream, downstream ) )
         {
-            printf( "Match: %d --> %d\n", upstream.idx, downstream.idx );
+            // printf( "Match: %d --> %d\n", upstream.idx, downstream.idx );
             findMatches( scans, i) ;
             result = true;
         }
@@ -355,6 +377,23 @@ int countBeacons( vector<Scan>& scans )
     return beacons.size();
 }
 
+int getMaxDist( vector<Scan>& scans )
+{
+    int maxDist = 0;
+    auto N = scans.size();
+    for ( int i = 0 ; i < N ; i++ )
+    {
+        for ( int j = 0 ; j < N ; j++ )
+        {
+            auto& p1 = scans[i].Tg;
+            auto& p2 = scans[j].Tg;
+            auto d = p1 - p2;
+            maxDist = max( maxDist, d.norm1() );
+        }
+    }
+    return maxDist;
+}
+
 vector<Rotation> generateAllRotations()
 {
     vector<Rotation> rotations;
@@ -401,8 +440,8 @@ vector<Rotation> generateAllRotations()
                 det += R.R[0][2] * ( R.R[1][0] * R.R[2][1] - R.R[1][1] * R.R[2][0] );
                 if (det == +1) 
                 {
-                    R.print();
-                    cout << endl;
+                    // R.print();
+                    // cout << endl;
                     rotations.push_back( R );
                 }
             }
