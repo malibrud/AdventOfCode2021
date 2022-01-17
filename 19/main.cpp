@@ -11,7 +11,7 @@ using namespace std;
 
 vector<Test> partATests =
 {
-    {"test1.txt", "", "4140"},
+    {"test1.txt", "", "79"},
 };
 string paramA = ""; 
  
@@ -58,7 +58,18 @@ struct Point
 
     bool operator<( const Point& q) const
     {
-        return p[0] < q.p[0];
+        if ( p[0] < q.p[0] ) return true;
+        if ( p[0] > q.p[0] ) return false;
+        if ( p[1] < q.p[1] ) return true;
+        if ( p[1] > q.p[1] ) return false;
+        if ( p[2] < q.p[2] ) return true;
+        if ( p[2] > q.p[2] ) return false;
+        return false;
+    }
+
+    void print()
+    {
+        printf( "[ %6d, %6d, %6d ]", p[0], p[1], p[2] );
     }
 };
 
