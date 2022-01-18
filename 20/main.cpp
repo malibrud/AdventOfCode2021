@@ -17,9 +17,9 @@ string paramA = "2";
  
 vector<Test> partBTests =
 {
-    {"test1.txt", "", ""},
+    {"test1.txt", "50", "3351"},
 };
-string paramB = "";
+string paramB = "50";
 
 void printImage( vector< vector<int> >& image );
 
@@ -103,6 +103,11 @@ string computePartA( string fileName, string param )
     return to_string( count );
 }
 
+string computePartB( string fileName, string param )
+{
+    return computePartA( fileName, param );
+}
+
 void printImage( vector< vector<int> >& image )
 {
     for ( auto& row: image )
@@ -115,12 +120,6 @@ void printImage( vector< vector<int> >& image )
         cout << endl;
     }
 }
-
-string computePartB( string fileName, string param )
-{
-    return to_string( 0 );
-}
-
 int main(int argc, char **argv)
 {
     if (argc == 1)

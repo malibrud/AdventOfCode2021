@@ -502,3 +502,27 @@ It generates the following values:
 [ -1  0  0 ]    [  0  0 -1 ]    [  1  0  0 ]    [  0  1  0 ]    [ -1  0  0 ]    [  0 -1  0 ]    
 [  0  0 -1 ]    [  1  0  0 ]    [  0 -1  0 ]    [  1  0  0 ]    [  0  1  0 ]    [ -1  0  0 ]    
 ```
+
+## [Day 20](20/main.cpp)
+
+Interesting take on convolution.  The convolution over nine pixels for the bits of an index
+which is used to lookup the new bit value in the "algorithm".  Interesting twist for the 
+actual data is that 0x000 maps to 1 and 0x1ff maps to 0.  So the image extending off to infinity toggles
+back and forth between 0 and 1, or '.' and '#'.
+
+Here is the program output:
+
+```
+Running Part A:
+Running tests...
+[0] test1.txt(2) -> 35...   Pass
+The answer is: 5765
+
+
+Running Part B:
+Running tests...
+[0] test1.txt(50) -> 3351...   Pass
+The answer is: 18509
+```
+
+
