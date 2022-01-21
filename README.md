@@ -525,4 +525,21 @@ Running tests...
 The answer is: 18509
 ```
 
+## [Day 21](https://adventofcode.com/2021/day/21) [Solution](21/main.cpp)
 
+First part was fairly straightforward.  Second part was pretty complex.  Finally settled on an approach 
+which tracks the number of instances of each unique game as parameterized by each players score and position.
+The output was as follows:
+
+```
+Running Part A:
+Running tests...
+[0] test1.txt() -> 739785...   Pass
+The answer is: 855624
+
+
+Running Part B:
+Running tests...
+[0] test1.txt() -> 444356092776315...   Pass
+The answer is: 187451244607486
+```

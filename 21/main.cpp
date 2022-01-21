@@ -14,7 +14,7 @@ string paramA = "";
  
 vector<Test> partBTests =
 {
-    {"test1.txt", "", ""},
+    {"test1.txt", "", "444356092776315"},
 };
 string paramB = "";
 
@@ -117,16 +117,6 @@ string computePartB( string fileName, string param )
     memset(gamesAfterMoves, 0, sizeof(gamesAfterMoves));
     gamesBeforeMoves[pos1][pos2][0][0] = 1;
 
-    // Compute the different ways that three rolls could total
-    int totals[10] = {0};
-    for ( int i = 1 ; i <= 3 ; i++ )
-        for ( int j = 1 ; j <= 3 ; j++ )
-            for ( int k = 1 ; k <= 3 ; k++ )
-            {
-                int total = i + j + k;
-                totals[total]++;
-            }
-
     int64 player1wins = 0;
     int64 player2wins = 0;
 
@@ -143,7 +133,7 @@ string computePartB( string fileName, string param )
         for ( int score1 = 0 ; score1 < 21 ; score1++ )
         for ( int score2 = 0 ; score2 < 21 ; score2++ )
         {
-            int n = gamesBeforeMoves[pos1][pos2][score1][score2];
+            auto n = gamesBeforeMoves[pos1][pos2][score1][score2];
             if (n == 0) continue;
             done = false;
 
@@ -177,7 +167,7 @@ string computePartB( string fileName, string param )
         for ( int score1 = 0 ; score1 < 21 ; score1++ )
         for ( int score2 = 0 ; score2 < 21 ; score2++ )
         {
-            int n = gamesBeforeMoves[pos1][pos2][score1][score2];
+            auto n = gamesBeforeMoves[pos1][pos2][score1][score2];
             if (n == 0) continue;
             done = false;
 
@@ -207,7 +197,7 @@ string computePartB( string fileName, string param )
 
         int64 totalGames = getTotalGames();
 
-        printf("\n%d: Total Games: %I64d,  Wins: %I64d, %I64d\n", turn, totalGames, player1wins, player2wins);
+        // printf("\n%d: Total Games: %I64d,  Wins: %I64d, %I64d\n", turn, totalGames, player1wins, player2wins);
         turn++;
     }
 
@@ -215,11 +205,6 @@ string computePartB( string fileName, string param )
 
     return to_string( result );
 }
-// 444,356,092,776,315
-//   5,471,399,467,034
-//   5,471,399,466,980
-//   8,451,884,679,112
-//  25,742,810,304,379
 
 
 int main(int argc, char **argv)
