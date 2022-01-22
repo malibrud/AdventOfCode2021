@@ -543,3 +543,27 @@ Running tests...
 [0] test1.txt() -> 444356092776315...   Pass
 The answer is: 187451244607486
 ```
+
+## [Day 22](https://adventofcode.com/2021/day/22) [Solution](22/main.cpp)
+The problem mainly involved a boolean 3D grid which are set to true of false depending on the input
+data.  For the first part this grid was 101 elements on an edge, which amounted to about 1,000,000 elements.
+This could be held in memory.  For the second part, the grid was much larger, approximately 200,000 on a side.
+This motivated more efficient ways to store the grid's state.  I divided the entire space into cells which
+all have boundaries given by the cubiods.  I then tracked whether all fo the cubes in a cell were either on or off.
+Even at this, there were approximately 800 x 800 x 800 cells for the actual problem.
+
+Here is the output;
+
+```
+Running Part A:
+Running tests...
+[0] test1.txt() -> 39...   Pass
+[1] test2.txt() -> 590784...   Pass
+The answer is: 603661
+
+
+Running Part B:
+Running tests...
+[0] test3.txt() -> 2758514936282235...   Pass
+The answer is: 1237264238382479
+```
